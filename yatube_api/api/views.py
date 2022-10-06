@@ -107,13 +107,13 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
-    
+
     def group_pk(self, request):
-        group=get_object_or_404(
+        group = get_object_or_404(
             Group,
             pk=self.kwargs.get('group_id')
-        ) 
-        return group  
+        )
+        return group
 
 
 class FollowViewSet(viewsets.ModelViewSet):
