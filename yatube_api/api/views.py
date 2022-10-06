@@ -44,9 +44,9 @@ class PostViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = ('group',)
 
-    def get_permissions(self):    
-        if self.action == 'retrieve':        
-            return (ReadOnly(),)    
+    def get_permissions(self):  
+        if self.action == 'retrieve':      
+            return (ReadOnly(),)
         return super().get_permissions()
 
     def perform_create(self, serializer):
@@ -66,7 +66,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     ]
 
     def perform_create(self, serializer):
-        post=get_object_or_404(
+        post = get_object_or_404(
             Post,
             pk=self.kwargs.get('post_id')
         )
@@ -81,7 +81,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             pk=self.kwargs.get('post_id')
         )
         return post.comments.all()
-    
+
     def get_permissions(self):    
         if self.action == 'retrieve':        
             return (ReadOnly(),)    
