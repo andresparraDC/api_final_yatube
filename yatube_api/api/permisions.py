@@ -20,6 +20,7 @@ class IsAuthorOrGuest(permissions.BasePermission):
             or obj.author == request.user
         )
 
+
 class ReadOnly(permissions.BasePermission):
     """Метод, допускающий только чтение."""
     def has_permission(self, request, view):
