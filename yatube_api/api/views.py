@@ -44,8 +44,8 @@ class PostViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = ('group',)
 
-    def get_permissions(self):  
-        if self.action == 'retrieve':      
+    def get_permissions(self):
+        if self.action == 'retrieve':
             return (ReadOnly(),)
         return super().get_permissions()
 
@@ -82,10 +82,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         )
         return post.comments.all()
 
-    def get_permissions(self):    
-        if self.action == 'retrieve':        
-            return (ReadOnly(),)    
-        return super().get_permissions() 
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return (ReadOnly(),)
+        return super().get_permissions()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -98,9 +98,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         IsAuthorOrGuest
     ]
 
-    def get_permissions(self):    
-        if self.action == 'retrieve':        
-            return (ReadOnly(),)    
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return (ReadOnly(),)
         return super().get_permissions()
 
     def create(self, request):
