@@ -24,7 +24,7 @@ class Group(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    
+
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(
@@ -78,6 +78,7 @@ class Comment(models.Model):
             self.author
         )
 
+
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
@@ -103,7 +104,7 @@ class Follow(models.Model):
                 ],
                 name='unique_user_subscribers')
         ]
-    
+
     def __str__(self) -> str:
         return '{} follows {}'.format(
             self.user,
