@@ -9,46 +9,43 @@ Router -> регистрация PostViewSet, GroupViewSet и CommentViewSet
 urlpatterns -> url-адреса проекта: api и как получить токен автоматически.
 
 """
-from django.urls import include
-from django.urls import path
-
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.views import TokenRefreshView
-
-from .views import CommentViewSet
-from .views import FollowViewSet
-from .views import GroupViewSet
-from .views import PostViewSet
+from .views import CommentViewSet, FollowViewSet, GroupViewSet, PostViewSet
 
 
-v1_router = DefaultRouter()
-v1_router.register(
+version = 'v1'
+app_name = 'posts'
+
+router = DefaultRouter()
+router.register(
     'groups',
     GroupViewSet,
     basename='groups'
 )
-v1_router.register(
+router.register(
     'posts',
     PostViewSet,
     basename='posts'
 )
-v1_router.register(
+router.register(
     r'posts/(?P<post_id>\d+)/comments',
     CommentViewSet,
     basename='comments'
 )
-v1_router.register(
+router.register(
     'follow',
     FollowViewSet,
     basename='follow'
 )
 
 urlpatterns = [
-    path('v1/', include(v1_router.urls)),
-    path('v1/auth/', include('djoser.urls')),
-    path('v1/', include('djoser.urls.jwt')),
-    path('v1/token/', TokenObtainPairView.as_view()),
-    path('v1/token/refresh', TokenRefreshView.as_view())
+    path(f'{version}/', include(router.urls)),
+    path(f'{version}/auth/', include('djoser.urls')),
+    path(f'{version}/', include('djoser.urls.jwt')),
+    path(f'{version}/token/', TokenObtainPairView.as_view()),
+    path(f'{version}/token/refresh', TokenRefreshView.as_view())
 ]

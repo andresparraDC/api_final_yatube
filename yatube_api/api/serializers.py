@@ -6,15 +6,9 @@
 Основная функция: получившийся Python-словарь конвертируется
 («рендерится») в JSON.
 """
+from posts.models import Comment, Follow, Group, Post, User
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
-
-
-from posts.models import Comment
-from posts.models import Follow
-from posts.models import Group
-from posts.models import Post
-from posts.models import User
 
 
 class GroupSerializer(serializers.ModelSerializer):

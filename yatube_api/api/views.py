@@ -6,26 +6,16 @@
 
 """
 from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import permissions
-from rest_framework import status
-from rest_framework import viewsets
+from posts.models import Group, Post, User
+from rest_framework import filters, permissions, status, viewsets
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework.pagination import LimitOffsetPagination
-
-from posts.models import Group
-from posts.models import Post
-from posts.models import User
 
 from .permisions import IsAuthorOrGuest
-from .permisions import ReadOnly
-from .serializers import CommentSerializer
-from .serializers import FollowSerializer
-from .serializers import GroupSerializer
-from .serializers import PostSerializer
+from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
+                          PostSerializer)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -36,18 +26,15 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [
         IsAuthenticatedOrReadOnly,
-        IsAuthorOrGuest
+        IsAuthorOrGuest,
     ]
     pagination_class = LimitOffsetPagination
     filter_backends = [
         DjangoFilterBackend
     ]
-    filterset_fields = ('group',)
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (ReadOnly(),)
-        return super().get_permissions()
+    filterset_fields = (
+        'group',
+    )
 
     def perform_create(self, serializer):
         serializer.save(
@@ -62,7 +49,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [
         IsAuthenticatedOrReadOnly,
-        IsAuthorOrGuest
+        IsAuthorOrGuest,
     ]
 
     def perform_create(self, serializer):
@@ -82,59 +69,42 @@ class CommentViewSet(viewsets.ModelViewSet):
         )
         return post.comments.all()
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (ReadOnly(),)
-        return super().get_permissions()
 
-
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Класс связан с моделью Group.
     Можно ли создавать сообщения из API."""
 
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [
-        IsAuthorOrGuest
+        IsAuthorOrGuest,
     ]
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return (ReadOnly(),)
-        return super().get_permissions()
 
     def create(self, request):
         return Response(
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
 
-    def group_pk(self, request):
-        group = get_object_or_404(
-            Group,
-            pk=self.kwargs.get('group_id')
-        )
-        return group
-
 
 class FollowViewSet(viewsets.ModelViewSet):
     """Класс связан с моделью Follow.
     Можно ли создавать сообщения из API."""
 
+    http_method_names = [
+        'get',
+        'post',
+    ]
     serializer_class = FollowSerializer
     filter_backends = [
         filters.SearchFilter,
-        DjangoFilterBackend
+        DjangoFilterBackend,
     ]
     search_fields = [
         'user__username',
         'following__username'
     ]
-    http_method_names = [
-        'get',
-        'post'
-    ]
     permission_classes = [
-        permissions.IsAuthenticated
+        permissions.IsAuthenticated,
     ]
 
     def get_queryset(self):

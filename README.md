@@ -23,11 +23,43 @@ python manage.py runserver
 
 # Примеры
 
-Для доступа к API необходимо получить токен: 
-Нужно выполнить POST-запрос localhost:8000/api/v1/token/
-передав поля username и password. API вернет JWT-токен
+Важное примечание: Для тестирования рекомендуется протестировать программу API для Yatube с помощью Postman.
 
-Дальше, передав токен можно будет обращаться к методам:
-/api/v1/posts/ (GET, POST, PUT, PATCH, DELETE)
+1. Создание пользователя. Вводятся имя пользователя и пароль.
 
-токен в заголовке Authorization: Bearer
+Запрос: POST http://127.0.0.1:8000/api/v1/auth/users/
+
+        Body (Запрос)
+
+        {
+            "username": "FreddyAndres2022",
+            "password": "testuser2022"
+        }
+
+Результат:
+
+{
+    "email": "",
+    "username": "FreddyAndres2022",
+    "id": 1
+}
+
+2. Назначить токен созданному пользователю
+
+Запрос: POST http://127.0.0.1:8000/api/v1/token/
+
+        Body (Запрос)
+
+        {
+            "username": "FreddyAndres2022",
+            "password": "testuser2022"
+        }
+
+Результат:
+
+{
+    "refresh": "eyJ0eXAiOiJKV1Q.............",
+    "access": "eyJ0eXAiOiJKV1Qi............."
+}
+
+Примечание: токены являются частными.
