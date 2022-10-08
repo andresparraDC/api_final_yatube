@@ -13,6 +13,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
+from rest_framework import mixins
+
 from .permisions import IsAuthorOrGuest
 from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
                           PostSerializer)
@@ -86,7 +88,8 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
         )
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class FollowViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
     """Класс связан с моделью Follow.
     Можно ли создавать сообщения из API."""
 
